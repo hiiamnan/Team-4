@@ -1,7 +1,6 @@
 US-103 - Create Appointment
 
-Feature: Create Booking
-
+Feature: - Create appointment
 User can:
 - Select appointment date
 - Select appointment time
