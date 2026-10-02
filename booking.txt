@@ -1,6 +1,6 @@
-US-103 - Create Booking
+US-103 - Create Appointment
 
-Feature: Create Appointment
+Feature: Create Booking
 
 User can:
 - Select appointment time
