@@ -3,12 +3,14 @@ using System.Collections.Generic;
 
 class Booking
 {
-    public int Id { get; set; }
-    public string CustomerName { get; set; }
-    public string Service { get; set; }
-    public DateTime BookingDate { get; set; }
-    public string Status { get; set; }
+    public int Id { get; set; } 
+    public string CustomerName { get; set; } 
 
+    // Updated by Chuong
+    public string ServiceName { get; set; }
+
+    public DateTime BookingDate { get; set; } 
+    public string Status { get; set; } 
     public Booking(int id, string customerName, string service,
                    DateTime bookingDate, string status)
     {
