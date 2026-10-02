@@ -6,3 +6,4 @@ User can:
 - Select appointment date
 - Select appointment time
 - Create an appointment
+- Have a contact 
