@@ -1,6 +1,6 @@
 US-103 - Create Appointment
 
-Feature: Create Booking
+Feature: Creating Booking Food
 
 User can:
 - Select appointment time
