@@ -5,7 +5,7 @@ class Booking
 {
     public int Id { get; set; }
     public string CustomerName { get; set; }
-    public string Service { get; set; }
+    public string ITService { get; set; }
     public DateTime BookingDate { get; set; }
     public string Status { get; set; }
 
