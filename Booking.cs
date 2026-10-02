@@ -110,7 +110,7 @@ class BookingManager
         }
 
         booking.Status = "Confirmed";
-        Console.WriteLine("Booking confirmed successfully.");
+        Console.WriteLine($"[NAM EDIT] Notice: Booking #{id} has been processed successfully!");
     }
 
     public void UpdateService(int id, string newService)
