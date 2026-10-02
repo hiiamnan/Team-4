@@ -1,4 +1,3 @@
-#nullable enable
 using System;
 using System.Collections.Generic;
 
@@ -6,7 +5,15 @@ class Booking
 {
     public int Id { get; set; }
     public string CustomerName { get; set; }
-    public string Service { get; set; }
+    public int Id { get; set; }
+    public string CustomerName { get; set; }
+    public string ITService { get; set; }
+    public DateTime BookingDate { get; set; }
+    public string Status { get; set; }
+
+    // Updated by Chuong
+    public string ServiceName { get; set; }
+
     public DateTime BookingDate { get; set; }
     public string Status { get; set; }
 
@@ -33,16 +40,10 @@ class Booking
 
 class BookingManager
 {
-    private readonly List<Booking> bookings = new List<Booking>();
+    private List<Booking> bookings = new List<Booking>();
 
     public void AddBooking(Booking booking)
     {
-        if (FindBooking(booking.Id) != null)
-        {
-            Console.WriteLine("Booking ID already exists.");
-            return;
-        }
-
         bookings.Add(booking);
         Console.WriteLine("Booking added successfully.");
     }
@@ -61,7 +62,7 @@ class BookingManager
         }
     }
 
-    public Booking? FindBooking(int id)
+    public Booking FindBooking(int id)
     {
         foreach (Booking booking in bookings)
         {
@@ -76,7 +77,8 @@ class BookingManager
 
     public void CancelBooking(int id)
     {
-        Booking? booking = FindBooking(id);
+        Booking booking = FindBooking(id);
+
         if (booking == null)
         {
             Console.WriteLine("Booking not found.");
@@ -87,68 +89,84 @@ class BookingManager
         Console.WriteLine("Booking cancelled.");
     }
 
-    // Both branches can edit this method to practice Git merge conflicts.
     public void ConfirmBooking(int id)
     {
-        Booking? booking = FindBooking(id);
+        Booking booking = FindBooking(id);
+
         if (booking == null)
         {
             Console.WriteLine("Booking not found.");
-            return;
-        }
-
-        if (booking.Status == "Cancelled")
-        {
-            Console.WriteLine("Cannot confirm a cancelled booking.");
-            return;
-        }
-
-        if (booking.BookingDate <= DateTime.Now)
-        {
-            Console.WriteLine("Cannot confirm an expired booking.");
             return;
         }
 
         booking.Status = "Confirmed";
-        Console.WriteLine("Booking confirmed successfully.");
+        Console.WriteLine("Booking confirmed.");
     }
 
-    public void UpdateService(int id, string newService)
+    // THEM MOI: Tim lich dat theo ten khach hang.
+    public void SearchByCustomerName(string customerName)
     {
-        Booking? booking = FindBooking(id);
-        if (booking == null)
+        if (string.IsNullOrWhiteSpace(customerName))
         {
-            Console.WriteLine("Booking not found.");
+            Console.WriteLine("Ten khach hang khong duoc de trong.");
             return;
         }
 
-        if (string.IsNullOrWhiteSpace(newService))
+        bool found = false;
+
+        foreach (Booking booking in bookings)
         {
-            Console.WriteLine("Service name cannot be empty.");
-            return;
+            if (booking.CustomerName.IndexOf(
+                    customerName.Trim(),
+                    StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                booking.Display();
+                found = true;
+            }
         }
 
-        booking.Service = newService.Trim();
-        Console.WriteLine("Service updated successfully.");
+        if (!found)
+        {
+            Console.WriteLine("Khong tim thay lich dat cua khach hang.");
+        }
     }
 
-    public void RescheduleBooking(int id, DateTime newDate)
+    // THEM MOI: Thong ke so lich dat theo trang thai.
+    public void ShowBookingStatistics()
     {
-        Booking? booking = FindBooking(id);
-        if (booking == null)
+        int pending = 0;
+        int confirmed = 0;
+        int cancelled = 0;
+        int other = 0;
+
+        foreach (Booking booking in bookings)
         {
-            Console.WriteLine("Booking not found.");
-            return;
+            switch (booking.Status)
+            {
+                case "Pending":
+                    pending++;
+                    break;
+
+                case "Confirmed":
+                    confirmed++;
+                    break;
+
+                case "Cancelled":
+                    cancelled++;
+                    break;
+
+                default:
+                    other++;
+                    break;
+            }
         }
 
-        if (newDate <= DateTime.Now)
-        {
-            Console.WriteLine("Booking date must be in the future.");
-            return;
-        }
-
-        booking.BookingDate = newDate;
-        Console.WriteLine("Booking rescheduled successfully.");
+        Console.WriteLine("\n=== BOOKING STATISTICS ===");
+        Console.WriteLine($"Total bookings: {bookings.Count}");
+        Console.WriteLine($"Pending: {pending}");
+        Console.WriteLine($"Confirmed: {confirmed}");
+        Console.WriteLine($"Cancelled: {cancelled}");
+        Console.WriteLine($"Other: {other}");
     }
 }
 
@@ -158,12 +176,35 @@ class Program
     {
         BookingManager manager = new BookingManager();
 
-        manager.AddBooking(new Booking(1, "Nguyen Van A",
-            "Fitness Training", DateTime.Now.AddDays(1), "Pending"));
-        manager.AddBooking(new Booking(2, "Tran Thi B",
-            "Nutrition Consultation", DateTime.Now.AddDays(2), "Pending"));
-        manager.AddBooking(new Booking(3, "Le Van C",
-            "Personal Training", DateTime.Now.AddDays(3), "Pending"));
+        manager.AddBooking(
+            new Booking(
+                1,
+                "Nguyen Van A",
+                "Fitness Training",
+                DateTime.Now.AddDays(1),
+                "Pending"
+            )
+        );
+
+        manager.AddBooking(
+            new Booking(
+                2,
+                "Tran Thi B",
+                "Nutrition Consultation",
+                DateTime.Now.AddDays(2),
+                "Pending"
+            )
+        );
+
+        manager.AddBooking(
+            new Booking(
+                3,
+                "Le Van C",
+                "Personal Training",
+                DateTime.Now.AddDays(3),
+                "Pending"
+            )
+        );
 
         Console.WriteLine("\n=== ALL BOOKINGS ===");
         manager.ShowAllBookings();
@@ -174,23 +215,20 @@ class Program
         Console.WriteLine("\n=== CANCEL BOOKING ===");
         manager.CancelBooking(2);
 
-        Console.WriteLine("\n=== UPDATE SERVICE ===");
-        manager.UpdateService(1, "Advanced Fitness Training");
-
-        Console.WriteLine("\n=== RESCHEDULE BOOKING ===");
-        manager.RescheduleBooking(3, DateTime.Now.AddDays(5));
-
-        Console.WriteLine("\n=== FIND BOOKING ===");
-        Booking? foundBooking = manager.FindBooking(3);
-        if (foundBooking != null)
-        {
-            foundBooking.Display();
-        }
-
-        Console.WriteLine("\n=== TRY TO CONFIRM CANCELLED BOOKING ===");
-        manager.ConfirmBooking(2);
-
         Console.WriteLine("\n=== UPDATED BOOKINGS ===");
         manager.ShowAllBookings();
+
+        // THEM MOI: Nhap ten khach hang tu ban phim.
+        Console.WriteLine("\n=== TIM THEO TEN KHACH HANG ===");
+        Console.Write("Nhap ten khach hang can tim: ");
+
+        string customerName = Console.ReadLine() ?? "";
+        manager.SearchByCustomerName(customerName);
+
+        // THEM MOI: Hien thi thong ke lich dat.
+        manager.ShowBookingStatistics();
+
+        Console.WriteLine("\nPress any key to exit...");
+        Console.ReadKey();
     }
 }
