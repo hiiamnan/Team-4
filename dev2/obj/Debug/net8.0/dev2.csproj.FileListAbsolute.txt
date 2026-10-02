@@ -1,0 +1,4 @@
+G:\peprn\dev2\dev2\obj\Debug\net8.0\dev2.GeneratedMSBuildEditorConfig.editorconfig
+G:\peprn\dev2\dev2\obj\Debug\net8.0\dev2.AssemblyInfoInputs.cache
+G:\peprn\dev2\dev2\obj\Debug\net8.0\dev2.AssemblyInfo.cs
+G:\peprn\dev2\dev2\obj\Debug\net8.0\dev2.csproj.CoreCompileInputs.cache
